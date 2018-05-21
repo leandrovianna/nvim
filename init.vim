@@ -11,6 +11,9 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
+Plug 'itchyny/lightline.vim'
+""""
+
 "" needs python3 support
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 """"
@@ -60,6 +63,10 @@ Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'vim-scripts/dante.vim'
 
 Plug 'ajmwagar/vim-deus'
+
+Plug 'notpratheek/vim-sol'
+
+Plug 'jacoborus/tender.vim'
 """"
 
 call plug#end()
@@ -68,6 +75,7 @@ call plug#end()
 
 syntax on
 set autoread
+set autowrite
 set ruler
 set number
 set incsearch
@@ -82,20 +90,28 @@ set expandtab
 set smarttab
 set mouse=c
 
-set background="dark"
-set termguicolors
-
 "" Colorscheme
-colorscheme deus
-
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
+let night = 18
+let morning = 6
+let hour_now = strftime('%H')
+"" use colorscheme dark if hour_now is [night, morning)
+execute 'set background=' . (hour_now >= night || hour_now < morning ? 'dark' : 'light')
+"" execute 'colorscheme ' . (hour_now >= night || hour_now < morning ? 'tender' : 'sol')
+colorscheme tender
+
+"" Lightline
+let g:lightline = {'colorscheme': 'tender'}
 
 "" New leader key (,)
 let mapleader=','
 
 "" List of Buffers
 nmap <Leader>b :buffers<CR>
+
+"" Copy and Pasta facilities
+map <Leader>y "+y
+map <Leader>p "+p
 
 "" :FormatJSON
 com! FormatJSON !python -m json.tool
@@ -104,12 +120,12 @@ augroup myautocmd
   autocmd!
 
   """ Indentation file-specific options
-  au Filetype cpp,c setlocal ts=4 sw=4 expandtab
+  au Filetype cpp,c,java setlocal ts=4 sw=4 expandtab
   au Filetype typescript,javascript,html,css setlocal ts=2 sw=2 expandtab
 
   "" Swap CapsLock and Esc key
-  au VimEnter * :silent !setxkbmap -option caps:swapescape
-  au VimLeave * :silent !setxkbmap -option
+  "" au VimEnter * :silent !setxkbmap -option caps:swapescape
+  "" au VimLeave * :silent !setxkbmap -option
 augroup end
 
 "" === Plugins Config ===
