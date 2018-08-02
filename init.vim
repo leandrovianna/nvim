@@ -57,6 +57,8 @@ Plug 'mattn/emmet-vim', { 'for': 'html' }
 Plug 'elzr/vim-json', { 'for': 'json' }
 """"
 
+Plug 'farmergreg/vim-lastplace'
+
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
 
@@ -89,6 +91,9 @@ set shiftwidth=2
 set expandtab
 set smarttab
 set mouse=c
+
+set foldmethod=syntax
+set foldlevel=3
 
 "" Colorscheme
 set termguicolors
