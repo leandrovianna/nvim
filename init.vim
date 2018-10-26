@@ -12,6 +12,9 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'itchyny/lightline.vim'
+
+"" make gvim-only colorschemes work in terminal
+Plug 'vim-scripts/CSApprox'
 """"
 
 "" needs python3 support
@@ -40,6 +43,7 @@ Plug 'plasticboy/vim-markdown', { 'for' : 'markdown' }
 
 Plug 'godlygeek/tabular', { 'for': 'markdown' }
 
+" press Ctrl-p
 Plug 'JamshedVesuna/vim-markdown-preview', { 'for': 'markdown' }
 """"
 
@@ -49,13 +53,15 @@ Plug 'mhartington/nvim-typescript/', { 'for': 'typescript' }
 
 "" Html, Jinja and templates
 Plug 'lepture/vim-jinja', { 'for' : 'html.jinja' }
-
-Plug 'mattn/emmet-vim', { 'for': 'html' }
 """"
 
 "" Json
 Plug 'elzr/vim-json', { 'for': 'json' }
 """"
+
+"" Protobuf
+Plug 'uarun/vim-protobuf'
+"""
 
 Plug 'farmergreg/vim-lastplace'
 
@@ -69,6 +75,10 @@ Plug 'ajmwagar/vim-deus'
 Plug 'notpratheek/vim-sol'
 
 Plug 'jacoborus/tender.vim'
+
+Plug 'vim-scripts/Fruidle'
+
+Plug 'srcery-colors/srcery-vim'
 """"
 
 call plug#end()
@@ -103,7 +113,7 @@ let hour_now = strftime('%H')
 "" use colorscheme dark if hour_now is [night, morning)
 execute 'set background=' . (hour_now >= night || hour_now < morning ? 'dark' : 'light')
 "" execute 'colorscheme ' . (hour_now >= night || hour_now < morning ? 'tender' : 'sol')
-colorscheme tender
+colorscheme fruidle
 
 "" Lightline
 let g:lightline = {'colorscheme': 'tender'}
@@ -135,5 +145,8 @@ augroup end
 
 "" === Plugins Config ===
 
-call neomake#configure#automake('rw', 500)
+call neomake#configure#automake('rw', 300)
 
+"" Vim-markdown-preview
+let vim_markdown_preview_use_xdg_open=1
+let vim_markdown_preview_github=1
