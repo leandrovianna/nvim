@@ -63,6 +63,13 @@ Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'uarun/vim-protobuf'
 """
 
+"" Lua
+Plug 'xolox/vim-lua-ftplugin'
+
+"" depedencies
+Plug 'xolox/vim-misc'
+"""
+
 Plug 'farmergreg/vim-lastplace'
 
 "" Colorschemes
@@ -94,6 +101,7 @@ set incsearch
 set autoindent
 set copyindent
 set nowrap
+set modeline
 
 set tabstop=2
 set softtabstop=2
@@ -103,17 +111,17 @@ set smarttab
 set mouse=c
 
 set foldmethod=syntax
-set foldlevel=3
 
 "" Colorscheme
 set termguicolors
-let night = 18
+
+let night = 22
 let morning = 6
 let hour_now = strftime('%H')
 "" use colorscheme dark if hour_now is [night, morning)
-execute 'set background=' . (hour_now >= night || hour_now < morning ? 'dark' : 'light')
-"" execute 'colorscheme ' . (hour_now >= night || hour_now < morning ? 'tender' : 'sol')
-colorscheme fruidle
+execute 'set background=' . (night <= hour_now || hour_now < morning ? 'dark' : 'light')
+execute 'colorscheme ' . (night <= hour_now || hour_now < morning ? 'tender' : 'fruidle')
+"" colorscheme fruidle
 
 "" Lightline
 let g:lightline = {'colorscheme': 'tender'}
@@ -129,7 +137,7 @@ map <Leader>y "+y
 map <Leader>p "+p
 
 "" :FormatJSON
-com! FormatJSON !python -m json.tool
+com! FormatJSON !python3 -m json.tool
 
 augroup myautocmd
   autocmd!
