@@ -13,6 +13,9 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'itchyny/lightline.vim'
 
+"" Languages Servers
+" Plug 'natebosch/vim-lsc'
+
 "" make gvim-only colorschemes work in terminal
 Plug 'vim-scripts/CSApprox'
 """"
@@ -35,7 +38,9 @@ Plug 'zchee/deoplete-go', { 'do': 'make' }
 """"
 
 "" Dart lang
-Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
+Plug 'dart-lang/dart-vim-plugin', { 'commit': '90d92be', 'for': 'dart' }
+
+" Plug 'natebosch/vim-lsc-dart', { 'for' : 'dart' }
 """"
 
 "" Markdown
@@ -158,3 +163,12 @@ call neomake#configure#automake('rw', 300)
 "" Vim-markdown-preview
 let vim_markdown_preview_use_xdg_open=1
 let vim_markdown_preview_github=1
+
+"" Ultisnips config
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-m>"
+
+"" Dart config
+let dart_format_on_save = 1
+let dart_style_guide = 2
