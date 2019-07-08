@@ -21,8 +21,11 @@ Plug 'vim-scripts/CSApprox'
 """"
 
 "" needs python3 support
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 """"
+
+""" Python
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 
 "" Git
 Plug 'tpope/vim-fugitive'
@@ -31,14 +34,14 @@ Plug 'tpope/vim-git'
 """"
 
 "" Golang
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 
 "" depends on gocode
-Plug 'zchee/deoplete-go', { 'do': 'make' }
+" Plug 'zchee/deoplete-go', { 'do': 'make' }
 """"
 
 "" Dart lang
-Plug 'dart-lang/dart-vim-plugin', { 'commit': '90d92be', 'for': 'dart' }
+Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 
 " Plug 'natebosch/vim-lsc-dart', { 'for' : 'dart' }
 """"
@@ -75,7 +78,11 @@ Plug 'xolox/vim-lua-ftplugin'
 Plug 'xolox/vim-misc'
 """
 
+"" open files in the last place
 Plug 'farmergreg/vim-lastplace'
+
+"" scala
+Plug 'derekwyatt/vim-scala'
 
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
@@ -154,6 +161,10 @@ augroup myautocmd
   "" Swap CapsLock and Esc key
   "" au VimEnter * :silent !setxkbmap -option caps:swapescape
   "" au VimLeave * :silent !setxkbmap -option
+  au InsertLeave,WinEnter * let &l:foldmethod=g:oldfoldmethod
+  au InsertEnter,WinLeave * let g:oldfoldmethod=&l:foldmethod | setlocal foldmethod=manual
+
+  " au FileType xml exe ":silent %!xmllint --format --recover - 2>/dev/null"
 augroup end
 
 "" === Plugins Config ===
@@ -172,3 +183,6 @@ let g:UltiSnipsJumpBackwardTrigger="<c-m>"
 "" Dart config
 let dart_format_on_save = 1
 let dart_style_guide = 2
+
+"" Go Fmt keep folding
+let g:go_fmt_experimental = 1
