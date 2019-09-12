@@ -84,6 +84,9 @@ Plug 'farmergreg/vim-lastplace'
 "" scala
 Plug 'derekwyatt/vim-scala'
 
+""" cpp
+Plug 'octol/vim-cpp-enhanced-highlight'
+
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
 
