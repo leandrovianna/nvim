@@ -87,6 +87,9 @@ Plug 'derekwyatt/vim-scala'
 """ cpp
 Plug 'octol/vim-cpp-enhanced-highlight'
 
+"" switch from header file to cpp file (vice versa)
+Plug 'ericcurtin/CurtineIncSw.vim'
+
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
 
@@ -147,7 +150,7 @@ let mapleader=','
 "" List of Buffers
 nmap <Leader>b :buffers<CR>
 
-"" Copy and Pasta facilities
+"" Copy and Paste facilities
 map <Leader>y "+y
 map <Leader>p "+p
 
@@ -189,3 +192,12 @@ let dart_style_guide = 2
 
 "" Go Fmt keep folding
 let g:go_fmt_experimental = 1
+
+"" CurtineIncSw config (switch between header and cpp file)
+map <Leader>s :call CurtineIncSw()<CR>
+
+""" Neomake with Standard JS local
+let g:neomake_javascript_enabled_makers = ['standard', 'eslint']
+let g:neomake_javascript_standard_maker = {
+        \ 'exe': $PWD . '/node_modules/.bin/standard'
+        \ }
