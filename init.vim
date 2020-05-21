@@ -13,19 +13,25 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'itchyny/lightline.vim'
 
-"" Languages Servers
-" Plug 'natebosch/vim-lsc'
+"" quote and bracket completion
+Plug 'jiangmiao/auto-pairs'
+
+"" formatter
+Plug 'sbdchd/neoformat'
+
+"" comment plugin
+Plug 'scrooloose/nerdcommenter'
 
 "" make gvim-only colorschemes work in terminal
 Plug 'vim-scripts/CSApprox'
 """"
 
 "" needs python3 support
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 """"
 
 """ Python
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'zchee/deoplete-jedi'
 
 "" Git
 Plug 'tpope/vim-fugitive'
@@ -34,7 +40,7 @@ Plug 'tpope/vim-git'
 """"
 
 "" Golang
-Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'on': [], 'for': 'go', 'do': ':GoUpdateBinaries' }
 
 "" depends on gocode
 " Plug 'zchee/deoplete-go', { 'do': 'make' }
@@ -196,8 +202,21 @@ let g:go_fmt_experimental = 1
 "" CurtineIncSw config (switch between header and cpp file)
 map <Leader>s :call CurtineIncSw()<CR>
 
-""" Neomake with Standard JS local
+"" Neomake with Standard JS local
 let g:neomake_javascript_enabled_makers = ['standard', 'eslint']
 let g:neomake_javascript_standard_maker = {
         \ 'exe': $PWD . '/node_modules/.bin/standard'
         \ }
+
+"" Deoplete settings
+let g:deoplete#enable_at_startup = 1
+
+""" neoformat settings """
+" Enable alignment
+let g:neoformat_basic_format_align = 1
+
+" Enable tab to spaces conversion
+let g:neoformat_basic_format_retab = 1
+
+" Enable trimmming of trailing whitespace
+let g:neoformat_basic_format_trim = 1
