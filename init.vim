@@ -26,12 +26,12 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'vim-scripts/CSApprox'
 """"
 
-"" needs python3 support
+"" autocomplete - needs python3 support
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 """"
 
 """ Python
-Plug 'zchee/deoplete-jedi'
+Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 
 "" Git
 Plug 'tpope/vim-fugitive'
@@ -40,10 +40,11 @@ Plug 'tpope/vim-git'
 """"
 
 "" Golang
-Plug 'fatih/vim-go', { 'on': [], 'for': 'go', 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
+Plug 'godoctor/godoctor.vim', { 'for': 'go' }
 
-"" depends on gocode
-" Plug 'zchee/deoplete-go', { 'do': 'make' }
+" autocomplete, depends on gocode
+Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}, 'for': 'go'}
 """"
 
 "" Dart lang
@@ -88,13 +89,13 @@ Plug 'xolox/vim-misc'
 Plug 'farmergreg/vim-lastplace'
 
 "" scala
-Plug 'derekwyatt/vim-scala'
+Plug 'derekwyatt/vim-scala', { 'for': 'scala' }
 
 """ cpp
-Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }
 
 "" switch from header file to cpp file (vice versa)
-Plug 'ericcurtin/CurtineIncSw.vim'
+Plug 'ericcurtin/CurtineIncSw.vim', { 'for': ['cpp', 'c'] }
 
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
