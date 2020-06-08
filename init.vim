@@ -19,7 +19,7 @@ Plug 'jiangmiao/auto-pairs'
 "" formatter
 Plug 'sbdchd/neoformat'
 
-"" comment plugin
+"" comment plugin - <Leader>cc <Leader>cu
 Plug 'scrooloose/nerdcommenter'
 
 "" make gvim-only colorschemes work in terminal
@@ -32,6 +32,8 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 """ Python
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
+" fold helper for python
+Plug 'tmhedberg/SimpylFold'
 
 "" Git
 Plug 'tpope/vim-fugitive'
@@ -97,6 +99,9 @@ Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }
 "" switch from header file to cpp file (vice versa)
 Plug 'ericcurtin/CurtineIncSw.vim', { 'for': ['cpp', 'c'] }
 
+""" julia
+Plug 'JuliaEditorSupport/julia-vim'
+
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
 
@@ -161,15 +166,15 @@ nmap <Leader>b :buffers<CR>
 map <Leader>y "+y
 map <Leader>p "+p
 
-"" :FormatJSON
-com! FormatJSON !python3 -m json.tool
+"" select a interval and :FormatJSON
+com! FormatJSON %!python3 -m json.tool
 
 augroup myautocmd
   autocmd!
 
   """ Indentation file-specific options
-  au Filetype cpp,c,java setlocal ts=4 sw=4 expandtab
-  au Filetype typescript,javascript,html,css setlocal ts=2 sw=2 expandtab
+  " au Filetype cpp,c,java setlocal ts=4 sw=4 expandtab
+  " au Filetype typescript,javascript,html,css setlocal ts=2 sw=2 expandtab
 
   "" Swap CapsLock and Esc key
   "" au VimEnter * :silent !setxkbmap -option caps:swapescape
@@ -212,6 +217,9 @@ let g:neomake_javascript_standard_maker = {
 "" Deoplete settings
 let g:deoplete#enable_at_startup = 1
 
+"" deoplete-jedi - close preview top window
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
 """ neoformat settings """
 " Enable alignment
 let g:neoformat_basic_format_align = 1
@@ -221,3 +229,6 @@ let g:neoformat_basic_format_retab = 1
 
 " Enable trimmming of trailing whitespace
 let g:neoformat_basic_format_trim = 1
+ 
+" enable matchit plugin for julia blocks
+runtime macros/matchit.vim
