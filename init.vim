@@ -100,7 +100,7 @@ Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }
 Plug 'ericcurtin/CurtineIncSw.vim', { 'for': ['cpp', 'c'] }
 
 """ julia
-Plug 'JuliaEditorSupport/julia-vim'
+Plug 'JuliaEditorSupport/julia-vim', { 'for': 'julia' }
 
 "" Colorschemes
 Plug 'jeffkreeftmeijer/vim-dim'
