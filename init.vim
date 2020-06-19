@@ -30,10 +30,14 @@ Plug 'vim-scripts/CSApprox'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 """"
 
+"" language servers support
+Plug 'natebosch/vim-lsc'
+"
+
 """ Python
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 " fold helper for python
-Plug 'tmhedberg/SimpylFold'
+Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
 
 "" Git
 Plug 'tpope/vim-fugitive'
@@ -52,7 +56,7 @@ Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}, 'for': 'go'}
 "" Dart lang
 Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 
-" Plug 'natebosch/vim-lsc-dart', { 'for' : 'dart' }
+Plug 'natebosch/vim-lsc-dart', { 'for' : 'dart' }
 """"
 
 "" Markdown
@@ -219,6 +223,9 @@ let g:deoplete#enable_at_startup = 1
 
 "" deoplete-jedi - close preview top window
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+"" lsc-vim - start language server for a filetype
+let g:lsc_auto_map = v:true
 
 """ neoformat settings """
 " Enable alignment
