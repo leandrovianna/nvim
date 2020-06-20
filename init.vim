@@ -59,6 +59,10 @@ Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 Plug 'natebosch/vim-lsc-dart', { 'for' : 'dart' }
 """"
 
+"" Flutter
+Plug 'reisub0/hot-reload.vim'
+"
+
 "" Markdown
 Plug 'plasticboy/vim-markdown', { 'for' : 'markdown' }
 
