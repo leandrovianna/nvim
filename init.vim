@@ -107,6 +107,9 @@ Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }
 "" switch from header file to cpp file (vice versa)
 Plug 'ericcurtin/CurtineIncSw.vim', { 'for': ['cpp', 'c'] }
 
+""" Qt support
+Plug 'fedorenchik/qt-support.vim'
+
 """ julia
 Plug 'JuliaEditorSupport/julia-vim', { 'for': 'julia' }
 
