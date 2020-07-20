@@ -13,6 +13,10 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'itchyny/lightline.vim'
 
+"" Unix command for vim
+Plug 'tpope/vim-eunuch'
+"
+
 "" quote and bracket completion
 Plug 'jiangmiao/auto-pairs'
 
@@ -43,6 +47,8 @@ Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
 Plug 'tpope/vim-fugitive'
 
 Plug 'tpope/vim-git'
+
+Plug 'airblade/vim-gitgutter'
 """"
 
 "" Golang
@@ -56,11 +62,11 @@ Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}, 'for': 'go'}
 "" Dart lang
 Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
 
-Plug 'natebosch/vim-lsc-dart', { 'for' : 'dart' }
+Plug 'natebosch/vim-lsc-dart', { 'for': 'dart' }
 """"
 
 "" Flutter
-Plug 'reisub0/hot-reload.vim'
+Plug 'reisub0/hot-reload.vim', { 'for': 'dart' }
 "
 
 "" Markdown
@@ -77,7 +83,10 @@ Plug 'mhartington/nvim-typescript/', { 'for': 'typescript' }
 """"
 
 "" Html, Jinja and templates
-Plug 'lepture/vim-jinja', { 'for' : 'html.jinja' }
+Plug 'lepture/vim-jinja', { 'for': 'html.jinja' }
+
+"" Emmet - write html fast
+Plug 'mattn/emmet-vim', { 'for': 'html' }
 """"
 
 "" Json
@@ -85,11 +94,11 @@ Plug 'elzr/vim-json', { 'for': 'json' }
 """"
 
 "" Protobuf
-Plug 'uarun/vim-protobuf'
+Plug 'uarun/vim-protobuf', { 'for': 'proto' }
 """
 
 "" Lua
-Plug 'xolox/vim-lua-ftplugin'
+Plug 'xolox/vim-lua-ftplugin', { 'for': 'lua' }
 
 "" depedencies
 Plug 'xolox/vim-misc'
@@ -108,7 +117,7 @@ Plug 'octol/vim-cpp-enhanced-highlight', { 'for': 'cpp' }
 Plug 'ericcurtin/CurtineIncSw.vim', { 'for': ['cpp', 'c'] }
 
 """ Qt support
-Plug 'fedorenchik/qt-support.vim'
+Plug 'fedorenchik/qt-support.vim', { 'for': 'cpp' }
 
 """ julia
 Plug 'JuliaEditorSupport/julia-vim', { 'for': 'julia' }
