@@ -13,6 +13,9 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'itchyny/lightline.vim'
 
+"" LanguageTool support
+Plug 'dpelle/vim-LanguageTool'
+
 "" Unix command for vim
 Plug 'tpope/vim-eunuch'
 "
@@ -29,6 +32,9 @@ Plug 'scrooloose/nerdcommenter'
 "" make gvim-only colorschemes work in terminal
 Plug 'vim-scripts/CSApprox'
 """"
+
+"" trailing whitespace
+Plug 'axelf4/vim-strip-trailing-whitespace'
 
 "" autocomplete - needs python3 support
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -165,7 +171,7 @@ set foldmethod=syntax
 "" Colorscheme
 set termguicolors
 
-let night = 22
+let night = 20
 let morning = 6
 let hour_now = strftime('%H')
 "" use colorscheme dark if hour_now is [night, morning)
@@ -255,3 +261,9 @@ let g:neoformat_basic_format_trim = 1
  
 " enable matchit plugin for julia blocks
 runtime macros/matchit.vim
+
+" enable spell on text files
+autocmd FileType markdown, text setlocal spell
+
+" LanguageTool config
+let g:languagetool_jar='$HOME/tools/languagetool/LanguageTool-5.1/languagetool-commandline.jar'
