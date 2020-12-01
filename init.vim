@@ -14,7 +14,7 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'itchyny/lightline.vim'
 
 "" LanguageTool support
-Plug 'dpelle/vim-LanguageTool'
+Plug 'rhysd/vim-grammarous'
 
 "" Unix command for vim
 Plug 'tpope/vim-eunuch'
@@ -220,7 +220,7 @@ let vim_markdown_preview_use_xdg_open=1
 let vim_markdown_preview_github=1
 
 "" Ultisnips config
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-m>"
 
@@ -263,7 +263,4 @@ let g:neoformat_basic_format_trim = 1
 runtime macros/matchit.vim
 
 " enable spell on text files
-autocmd FileType markdown, text setlocal spell
-
-" LanguageTool config
-let g:languagetool_jar='$HOME/tools/languagetool/LanguageTool-5.1/languagetool-commandline.jar'
+autocmd FileType markdown,text setlocal spell

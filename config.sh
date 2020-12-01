@@ -32,3 +32,6 @@ nvim +PlugInstall +q
 
 # Download a font to use on Terminal
 sh ./download_font.sh
+
+# Run Grammarous for the first time to download LanguageTool
+nvim +GrammarousCheck +q
