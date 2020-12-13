@@ -129,19 +129,7 @@ Plug 'fedorenchik/qt-support.vim', { 'for': 'cpp' }
 Plug 'JuliaEditorSupport/julia-vim', { 'for': 'julia' }
 
 "" Colorschemes
-Plug 'jeffkreeftmeijer/vim-dim'
-
-Plug 'vim-scripts/dante.vim'
-
 Plug 'ajmwagar/vim-deus'
-
-Plug 'notpratheek/vim-sol'
-
-Plug 'jacoborus/tender.vim'
-
-Plug 'vim-scripts/Fruidle'
-
-Plug 'srcery-colors/srcery-vim'
 """"
 
 call plug#end()
@@ -171,16 +159,16 @@ set foldmethod=syntax
 "" Colorscheme
 set termguicolors
 
-let night = 20
-let morning = 6
-let hour_now = strftime('%H')
+"let night = 20
+"let morning = 6
+"let hour_now = strftime('%H')
 "" use colorscheme dark if hour_now is [night, morning)
-execute 'set background=' . (night <= hour_now || hour_now < morning ? 'dark' : 'light')
-execute 'colorscheme ' . (night <= hour_now || hour_now < morning ? 'tender' : 'fruidle')
-"" colorscheme fruidle
+"execute 'set background=' . (night <= hour_now || hour_now < morning ? 'dark' : 'light')
+"execute 'colorscheme ' . (night <= hour_now || hour_now < morning ? 'tender' : 'fruidle')
+colorscheme deus
 
 "" Lightline
-let g:lightline = {'colorscheme': 'tender'}
+"let g:lightline = {'colorscheme': 'tender'}
 
 "" New leader key (,)
 let mapleader=','
