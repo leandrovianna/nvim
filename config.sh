@@ -5,23 +5,12 @@
 
 # install grip to preview markdown files
 pip install grip
-pip3 install grip
 
 # install pynvim
 pip install pynvim
-pip3 install pynvim
 
-# install jedi to python autocompletion
-pip install jedi
-pip3 install jedi
-
-# install pylint to neomake use
-pip install pylint
-pip3 install pylint
-
-# install python auto-format
-pip install yapf
-pip3 install yapf
+# install pylsp
+pip install 'python-lsp-server[all]'
 
 # neo-vim should already be installed!
 

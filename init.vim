@@ -1,17 +1,20 @@
 "" nvim config
 
-"" === Plug config ===
+"" ============================================================================
+"" Plug config
 
 call plug#begin()
 
 "" General Plugins 
-Plug 'neomake/neomake'
-
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 Plug 'itchyny/lightline.vim'
+
+"" autocompletion and LSP
+Plug 'neovim/nvim-lspconfig'
+"Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 
 "" LanguageTool support
 Plug 'rhysd/vim-grammarous'
@@ -19,9 +22,6 @@ Plug 'rhysd/vim-grammarous'
 "" Unix command for vim
 Plug 'tpope/vim-eunuch'
 "
-
-"" quote and bracket completion
-Plug 'jiangmiao/auto-pairs'
 
 "" formatter
 Plug 'sbdchd/neoformat'
@@ -36,19 +36,6 @@ Plug 'vim-scripts/CSApprox'
 "" trailing whitespace
 Plug 'axelf4/vim-strip-trailing-whitespace'
 
-"" autocomplete - needs python3 support
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-""""
-
-"" language servers support
-Plug 'natebosch/vim-lsc'
-"
-
-""" Python
-Plug 'zchee/deoplete-jedi', { 'for': 'python' }
-" fold helper for python
-Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
-
 "" Git
 Plug 'tpope/vim-fugitive'
 
@@ -60,15 +47,10 @@ Plug 'airblade/vim-gitgutter'
 "" Golang
 Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
 Plug 'godoctor/godoctor.vim', { 'for': 'go' }
-
-" autocomplete, depends on gocode
-Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}, 'for': 'go'}
 """"
 
 "" Dart lang
 Plug 'dart-lang/dart-vim-plugin', { 'for': 'dart' }
-
-Plug 'natebosch/vim-lsc-dart', { 'for': 'dart' }
 """"
 
 "" Flutter
@@ -133,42 +115,38 @@ Plug 'ajmwagar/vim-deus'
 """"
 
 call plug#end()
+"" ============================================================================
 
-"" === General Config ===
+"" ============================================================================
+"" General Config
 
-syntax on
-set autoread
-set autowrite
-set ruler
-set number
-set incsearch
-set autoindent
-set copyindent
-set nowrap
-set modeline
+syntax on                       " syntax highlighting, see :help syntax
+filetype plugin indent on       " file type detection, see :help filetype
+set number                      " display line number
+set relativenumber              " display relative line numbers
+set path+=**                    " improves searching, see :help path
+set noswapfile                  " disable use of swap files
+set wildmenu                    " completion menu
+set backspace=indent,eol,start  " ensure proper backspace functionality
+set undodir=~/.cache/nvim/undo  " undo ability will persist after exiting file
+set undofile                    " see :help undodir and :help undofile
+set incsearch                   " see results while search is being typed, see :help incsearch
+set smartindent                 " auto indent on new lines, see :help smartindent
+set ic                          " ignore case when searching
+set colorcolumn=80              " display color when line reaches pep8 standards
+set expandtab                   " expanding tab to spaces
+set tabstop=4                   " setting tab to 4 columns
+set shiftwidth=4                " setting tab to 4 columns
+set softtabstop=4               " setting tab to 4 columns
+set showmatch                   " display matching bracket or parenthesis
+set hlsearch incsearch          " highlight all pervious search pattern with incsearch
 
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set expandtab
-set smarttab
-set mouse=c
+"" ============================================================================
 
-set foldmethod=syntax
-
+"" ============================================================================
 "" Colorscheme
 set termguicolors
-
-"let night = 20
-"let morning = 6
-"let hour_now = strftime('%H')
-"" use colorscheme dark if hour_now is [night, morning)
-"execute 'set background=' . (night <= hour_now || hour_now < morning ? 'dark' : 'light')
-"execute 'colorscheme ' . (night <= hour_now || hour_now < morning ? 'tender' : 'fruidle')
 colorscheme deus
-
-"" Lightline
-"let g:lightline = {'colorscheme': 'tender'}
 
 "" New leader key (,)
 let mapleader=','
@@ -183,25 +161,18 @@ map <Leader>p "+p
 "" select a interval and :FormatJSON
 com! FormatJSON %!python3 -m json.tool
 
-augroup myautocmd
-  autocmd!
+" display ugly bright red bar at color column number
+highlight ColorColumn ctermbg=9
 
-  """ Indentation file-specific options
-  " au Filetype cpp,c,java setlocal ts=4 sw=4 expandtab
-  " au Filetype typescript,javascript,html,css setlocal ts=2 sw=2 expandtab
+" Keybind Ctrl+l to clear search
+nnoremap <C-l> :nohl<CR><C-l>:echo "Search Cleared"<CR>
 
-  "" Swap CapsLock and Esc key
-  "" au VimEnter * :silent !setxkbmap -option caps:swapescape
-  "" au VimLeave * :silent !setxkbmap -option
-  au InsertLeave,WinEnter * let &l:foldmethod=g:oldfoldmethod
-  au InsertEnter,WinLeave * let g:oldfoldmethod=&l:foldmethod | setlocal foldmethod=manual
+" When python filetype is detected, F5 can be used to execute script
+autocmd FileType python nnoremap <buffer> <F5> :w<cr>:exec '!clear'<cr>:exec '!python3' shellescape(expand('%:p'), 1)<cr>
+"" ============================================================================
 
-  " au FileType xml exe ":silent %!xmllint --format --recover - 2>/dev/null"
-augroup end
-
-"" === Plugins Config ===
-
-call neomake#configure#automake('rw', 300)
+"" ============================================================================
+"" Plugins Config
 
 "" Vim-markdown-preview
 let vim_markdown_preview_use_xdg_open=1
@@ -222,33 +193,14 @@ let g:go_fmt_experimental = 1
 "" CurtineIncSw config (switch between header and cpp file)
 map <Leader>s :call CurtineIncSw()<CR>
 
-"" Neomake with Standard JS local
-let g:neomake_javascript_enabled_makers = ['standard', 'eslint']
-let g:neomake_javascript_standard_maker = {
-        \ 'exe': $PWD . '/node_modules/.bin/standard'
-        \ }
-
-"" Deoplete settings
-let g:deoplete#enable_at_startup = 1
-
-"" deoplete-jedi - close preview top window
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-"" lsc-vim - start language server for a filetype
-let g:lsc_auto_map = v:true
-
-""" neoformat settings """
-" Enable alignment
-let g:neoformat_basic_format_align = 1
-
-" Enable tab to spaces conversion
-let g:neoformat_basic_format_retab = 1
-
-" Enable trimmming of trailing whitespace
-let g:neoformat_basic_format_trim = 1
- 
 " enable matchit plugin for julia blocks
 runtime macros/matchit.vim
 
 " enable spell on text files
 autocmd FileType markdown,text setlocal spell
+"" ============================================================================
+
+"" ============================================================================
+"" LSP configuration
+"" pylsp - python
+lua require'lspconfig'.pylsp.setup{}
