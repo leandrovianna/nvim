@@ -12,6 +12,9 @@ pip install pynvim
 # install pylsp
 pip install 'python-lsp-server[all]'
 
+# install yapf (autoformat python)
+pip install yapf
+
 # neo-vim should already be installed!
 
 # install plug - plugin manager
