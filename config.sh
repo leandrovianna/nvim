@@ -20,7 +20,8 @@ pip install yapf
 # install plug - plugin manager
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-nvim +PlugInstall +q
+nvim +PlugInstall! +q
 
 # Run Grammarous for the first time to download LanguageTool
 nvim +GrammarousCheck +q
+
