@@ -221,4 +221,4 @@ vim.api.nvim_create_autocmd('BufWritePre', {
 -- vim-pydocstring
 vim.g.pydocstring_formatter = 'google'
 vim.g.pydocstring_ignore_init = true
-
+vim.keymap.set('n', '<Leader>d', '<Plug>(pydocstring)', {silent = true})
