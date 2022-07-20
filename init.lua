@@ -46,6 +46,11 @@ Plug 'tpope/vim-git'
 Plug 'airblade/vim-gitgutter'
 --------------------------------------------------------------------------------
 
+-- Python
+Plug ('heavenshell/vim-pydocstring',
+    {['for'] = 'python', ['do'] = 'make install'})
+--------------------------------------------------------------------------------
+
 -- Golang
 Plug ('fatih/vim-go', {['for'] = 'go', ['do'] = ':GoUpdateBinaries'})
 Plug ('godoctor/godoctor.vim', {['for'] = 'go'})
@@ -130,7 +135,6 @@ vim.opt.path:append('**') -- improves searching, see :help path
 vim.opt.swapfile = false -- disable use of swap files
 vim.opt.wildmenu = true -- completion menu
 vim.opt.backspace = 'indent,eol,start' -- ensure proper backspace functionality
-vim.opt.undodir  = '~/.cache/nvim/undo' -- undo ability will persist after exiting file
 vim.opt.undofile = true -- see :help undodir and :help undofile
 vim.opt.incsearch = true -- see results while search is being typed, see :help incsearch
 vim.opt.smartindent = true -- auto indent on new lines, see :help smartindent
@@ -200,8 +204,11 @@ vim.api.nvim_create_autocmd('Filetype', {
 vim.g.coq_settings = { auto_start = true }
 
 -- LSP configuration
+local lsp = require('lspconfig')
+-- using coq to support LSP snippets
+local coq = require('coq')
 -- pylsp - python
-require('lspconfig').pylsp.setup{}
+lsp.pylsp.setup(coq.lsp_ensure_capabilities{})
 
 -- Neoformat configuration
 -- run formatter on save
@@ -210,3 +217,8 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     pattern = '*',
     command = 'undojoin | Neoformat'
 })
+
+-- vim-pydocstring
+vim.g.pydocstring_formatter = 'google'
+vim.g.pydocstring_ignore_init = true
+
