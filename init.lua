@@ -145,6 +145,7 @@ vim.opt.shiftwidth = 4 -- setting tab to 4 columns
 vim.opt.softtabstop = 4 -- setting tab to 4 columns
 vim.opt.showmatch = true -- display matching bracket or parenthesis
 vim.opt.hlsearch = true -- highlight all pervious search pattern with incsearch
+vim.opt.foldmethod = 'indent' -- use indentation to create folds
 
 -- New Leader Key
 vim.g.mapleader = ','
@@ -165,6 +166,23 @@ vim.keymap.set('n', '<C-l>', function ()
 	vim.cmd('nohl')
 	print('Search cleared')
 end, {noremap = true})
+
+-- Enable autosave of folds
+vim.api.nvim_create_autocmd('BufWinLeave', {
+    pattern = '*',
+    callback = function() vim.cmd('mkview') end,
+})
+vim.api.nvim_create_autocmd('BufWinEnter', {
+    pattern = '*',
+    callback = function()
+        local ok, errmsg = pcall(function() vim.cmd('silent loadview') end)
+
+        -- E484 error is not found view (folds) file
+        if not ok and string.find(errmsg, 'E484') == nil then
+            error(errmsg)
+        end
+    end,
+})
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------

@@ -15,6 +15,9 @@ pip install 'python-lsp-server[all]'
 # install yapf (autoformat python)
 pip install yapf
 
+# install jq (autoformat json)
+pamac install jq
+
 # neo-vim should already be installed!
 
 # install plug - plugin manager
