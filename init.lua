@@ -130,7 +130,6 @@ vim.call('plug#end')
 vim.cmd 'syntax on' -- syntax highlighting, see :help syntax
 vim.cmd 'filetype plugin indent on' -- file type detection, see :help filetype
 vim.opt.number = true -- display line number
-vim.opt.relativenumber = true -- display relative line numbers
 vim.opt.path:append('**') -- improves searching, see :help path
 vim.opt.swapfile = false -- disable use of swap files
 vim.opt.wildmenu = true -- completion menu
