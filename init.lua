@@ -166,23 +166,6 @@ vim.keymap.set('n', '<C-l>', function ()
 	vim.cmd('nohl')
 	print('Search cleared')
 end, {noremap = true})
-
--- Enable autosave of folds
-vim.api.nvim_create_autocmd('BufWinLeave', {
-    pattern = '*',
-    callback = function() vim.cmd('mkview') end,
-})
-vim.api.nvim_create_autocmd('BufWinEnter', {
-    pattern = '*',
-    callback = function()
-        local ok, errmsg = pcall(function() vim.cmd('silent loadview') end)
-
-        -- E484 error is not found view (folds) file
-        if not ok and string.find(errmsg, 'E484') == nil then
-            error(errmsg)
-        end
-    end,
-})
 --------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------
