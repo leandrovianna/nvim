@@ -120,6 +120,7 @@ Plug ('JuliaEditorSupport/julia-vim', {['for'] = 'julia'})
 
 -- Colorschemes
 Plug 'ajmwagar/vim-deus'
+Plug 'morhetz/gruvbox'
 --------------------------------------------------------------------------------
 
 vim.call('plug#end')
@@ -152,7 +153,8 @@ vim.g.mapleader = ','
 
 -- Colorscheme
 vim.opt.termguicolors = true
-vim.cmd 'colorscheme deus'
+vim.opt.background = 'dark'
+vim.cmd 'colorscheme gruvbox'
 
 -- Map key to show a List of Buffers
 vim.keymap.set('n', '<Leader>b', ':buffers<CR>')
