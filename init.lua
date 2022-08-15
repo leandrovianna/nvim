@@ -147,6 +147,7 @@ vim.opt.softtabstop = 4 -- setting tab to 4 columns
 vim.opt.showmatch = true -- display matching bracket or parenthesis
 vim.opt.hlsearch = true -- highlight all pervious search pattern with incsearch
 vim.opt.foldmethod = 'indent' -- use indentation to create folds
+vim.opt.wrap = false -- no wrap lines
 
 -- New Leader Key
 vim.g.mapleader = ','
