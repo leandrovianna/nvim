@@ -237,6 +237,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     pattern = '*',
     command = 'undojoin | Neoformat'
 })
+vim.g.neoformat_enabled_yaml = {}
 
 -- vim-pydocstring
 vim.g.pydocstring_formatter = 'google'
