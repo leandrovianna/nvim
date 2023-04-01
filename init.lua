@@ -230,6 +230,12 @@ lsp.pylsp.setup(coq.lsp_ensure_capabilities{
 -- pyright - python
 lsp.pyright.setup(coq.lsp_ensure_capabilities{})
 
+-- ccls - c/cpp
+lsp.ccls.setup(coq.lsp_ensure_capabilities{})
+
+-- golsp - golang
+lsp.gopls.setup(coq.lsp_ensure_capabilities{})
+
 -- Neoformat configuration
 -- run formatter on save
 local augroup_fmt = vim.api.nvim_create_augroup('fmt', {clear = true})
