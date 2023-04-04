@@ -212,21 +212,6 @@ vim.g.coq_settings = {
 local lsp = require('lspconfig')
 -- using coq to support LSP snippets
 local coq = require('coq')
--- pylsp - python
-lsp.pylsp.setup(coq.lsp_ensure_capabilities{
-    settings = {
-        pylsp = {
-            plugins = {
-                pylint = {
-                    enabled = true,
-                },
-                pydocstyle = {
-                    enabled = true,
-                },
-            }
-        }
-    }
-})
 -- pyright - python
 lsp.pyright.setup(coq.lsp_ensure_capabilities{})
 
