@@ -212,6 +212,21 @@ vim.g.coq_settings = {
 local lsp = require('lspconfig')
 -- using coq to support LSP snippets
 local coq = require('coq')
+-- pylsp - python
+lsp.pylsp.setup(coq.lsp_ensure_capabilities{
+    settings = {
+        pylsp = {
+            plugins = {
+                pylint = {
+                    enabled = false,
+                },
+                pydocstyle = {
+                    enabled = true,
+                },
+            }
+        }
+    }
+})
 -- pyright - python
 lsp.pyright.setup(coq.lsp_ensure_capabilities{})
 
@@ -221,16 +236,27 @@ lsp.ccls.setup(coq.lsp_ensure_capabilities{})
 -- golsp - golang
 lsp.gopls.setup(coq.lsp_ensure_capabilities{})
 
+-- neovim init autogroup
+local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
+
 -- Neoformat configuration
 -- run formatter on save
-local augroup_fmt = vim.api.nvim_create_augroup('fmt', {clear = true})
 vim.api.nvim_create_autocmd('BufWritePre', {
     pattern = '*',
-    command = 'undojoin | Neoformat'
+    command = 'undojoin | Neoformat',
+    group = augroup_config,
 })
+-- disable format in yaml files
 vim.g.neoformat_enabled_yaml = {}
 
 -- vim-pydocstring
 vim.g.pydocstring_formatter = 'google'
 vim.g.pydocstring_ignore_init = true
 vim.keymap.set('n', '<Leader>d', '<Plug>(pydocstring)', {silent = true})
+
+-- run isort to organize imports after save
+vim.api.nvim_create_autocmd('BufWritePost', {
+    pattern = '*.py',
+    group = augroup_config,
+    command = 'undojoin | silent !isort %',
+})
