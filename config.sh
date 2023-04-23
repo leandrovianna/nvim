@@ -28,3 +28,5 @@ nvim +PlugInstall! +q
 # Run Grammarous for the first time to download LanguageTool
 nvim +GrammarousCheck +q
 
+# Install COQ depedencies
+nvim +COQdeps
