@@ -74,7 +74,7 @@ Plug ('JamshedVesuna/vim-markdown-preview', {['for'] = 'markdown'})
 --------------------------------------------------------------------------------
 
 -- Typescript
-Plug ('mhartington/nvim-typescript/', {['for'] = 'typescript'})
+Plug 'leafgarland/typescript-vim'
 --------------------------------------------------------------------------------
 
 -- Html, Jinja and templates
@@ -235,6 +235,12 @@ lsp.ccls.setup(coq.lsp_ensure_capabilities{})
 
 -- golsp - golang
 lsp.gopls.setup(coq.lsp_ensure_capabilities{})
+
+-- tsserver - typescript
+lsp.tsserver.setup(coq.lsp_ensure_capabilities{})
+
+-- angularls - angularjs
+lsp.angularls.setup(coq.lsp_ensure_capabilities{})
 
 -- neovim init autogroup
 local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
