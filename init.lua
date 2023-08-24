@@ -16,11 +16,8 @@ Plug ('ms-jpq/coq_nvim', {branch = 'coq', ['do'] = ':COQdeps'})
 -- 9000+ Snippets
 Plug ('ms-jpq/coq.artifacts', {branch = 'artifacts'})
 
--- autoformat
-Plug 'sbdchd/neoformat'
-
 -- LanguageTool support
-Plug 'rhysd/vim-grammarous'
+Plug ('rhysd/vim-grammarous', {['do'] = ':GrammarousCheck'})
 
 -- Unix command for vim
 Plug 'tpope/vim-eunuch'
@@ -75,6 +72,9 @@ Plug ('JamshedVesuna/vim-markdown-preview', {['for'] = 'markdown'})
 
 -- Typescript
 Plug 'leafgarland/typescript-vim'
+
+-- JSX
+Plug 'MaxMEllon/vim-jsx-pretty'
 --------------------------------------------------------------------------------
 
 -- Html, Jinja and templates
@@ -82,7 +82,7 @@ Plug ('lepture/vim-jinja', {['for'] = 'html.jinja'})
 --------------------------------------------------------------------------------
 
 -- Emmet - write html fast
-Plug ('mattn/emmet-vim', {['for'] = 'html'})
+Plug ('mattn/emmet-vim', {['for'] = {'html', 'css', 'javascript', 'typescript'}})
 --------------------------------------------------------------------------------
 
 -- Json
@@ -208,12 +208,28 @@ vim.g.coq_settings = {
     auto_start = true,
 }
 
+-- neovim init autogroup
+local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
+
 -- LSP configuration
 local lsp = require('lspconfig')
 -- using coq to support LSP snippets
 local coq = require('coq')
+
+local on_attach = function(client, bufnr)
+  -- format on save
+  if client.server_capabilities.documentFormattingProvider then
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = augroup_config,
+      buffer = bufnr,
+      callback = function() vim.lsp.buf.format() end
+    })
+  end
+end
+
 -- pylsp - python
 lsp.pylsp.setup(coq.lsp_ensure_capabilities{
+    on_attach = on_attach,
     settings = {
         pylsp = {
             plugins = {
@@ -228,32 +244,29 @@ lsp.pylsp.setup(coq.lsp_ensure_capabilities{
     }
 })
 -- pyright - python
-lsp.pyright.setup(coq.lsp_ensure_capabilities{})
+lsp.pyright.setup(coq.lsp_ensure_capabilities{
+    on_attach = on_attach
+})
 
 -- ccls - c/cpp
-lsp.ccls.setup(coq.lsp_ensure_capabilities{})
+lsp.ccls.setup(coq.lsp_ensure_capabilities{
+    on_attach = on_attach
+})
 
 -- golsp - golang
-lsp.gopls.setup(coq.lsp_ensure_capabilities{})
+lsp.gopls.setup(coq.lsp_ensure_capabilities{
+    on_attach = on_attach
+})
 
 -- tsserver - typescript
-lsp.tsserver.setup(coq.lsp_ensure_capabilities{})
+lsp.tsserver.setup(coq.lsp_ensure_capabilities{
+    on_attach = on_attach
+})
 
 -- angularls - angularjs
-lsp.angularls.setup(coq.lsp_ensure_capabilities{})
-
--- neovim init autogroup
-local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
-
--- Neoformat configuration
--- run formatter on save
-vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern = '*',
-    command = 'undojoin | Neoformat',
-    group = augroup_config,
+lsp.angularls.setup(coq.lsp_ensure_capabilities{
+    on_attach = on_attach
 })
--- disable format in yaml files
-vim.g.neoformat_enabled_yaml = {}
 
 -- vim-pydocstring
 vim.g.pydocstring_formatter = 'google'
