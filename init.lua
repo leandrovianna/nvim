@@ -1,20 +1,13 @@
---------------------------------------------------------------------------------
+--******************************************************************************
+-- Plugins installation
+--******************************************************************************
 local Plug = vim.fn['plug#']
-
 vim.call('plug#begin')
 
--- General Plugins 
+-- General Plugins
 Plug ('scrooloose/nerdtree', { on =  'NERDTreeToggle'})
 
 Plug 'itchyny/lightline.vim'
-
--- autocompletion and LSP
-Plug 'neovim/nvim-lspconfig'
-
-Plug ('ms-jpq/coq_nvim', {branch = 'coq', ['do'] = ':COQdeps'})
-
--- 9000+ Snippets
-Plug ('ms-jpq/coq.artifacts', {branch = 'artifacts'})
 
 -- Unix command for vim
 Plug 'tpope/vim-eunuch'
@@ -32,12 +25,24 @@ Plug 'axelf4/vim-strip-trailing-whitespace'
 Plug 'farmergreg/vim-lastplace'
 --------------------------------------------------------------------------------
 
--- Git
-Plug 'tpope/vim-fugitive'
+-- Language Server Protocol
+Plug 'neovim/nvim-lspconfig'
+--------------------------------------------------------------------------------
 
-Plug 'tpope/vim-git'
+-- Autocompletion nvim-cmp
+Plug 'hrsh7th/nvim-cmp'
 
-Plug 'airblade/vim-gitgutter'
+-- sources for nvim-cmp
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+
+-- vsnip - snippet plugin
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'rafamadriz/friendly-snippets'
 --------------------------------------------------------------------------------
 
 -- Python
@@ -46,7 +51,6 @@ Plug ('heavenshell/vim-pydocstring',
 --------------------------------------------------------------------------------
 
 -- Golang
-Plug ('fatih/vim-go', {['for'] = 'go', ['do'] = ':GoUpdateBinaries'})
 Plug ('godoctor/godoctor.vim', {['for'] = 'go'})
 --------------------------------------------------------------------------------
 
@@ -79,6 +83,7 @@ Plug ('lepture/vim-jinja', {['for'] = 'html.jinja'})
 --------------------------------------------------------------------------------
 
 -- Emmet - write html fast
+-- <C-Y>,
 Plug ('mattn/emmet-vim', {['for'] = {'html', 'css', 'javascript', 'typescript'}})
 --------------------------------------------------------------------------------
 
@@ -115,16 +120,16 @@ Plug ('fedorenchik/qt-support.vim', {['for'] = 'cpp'})
 Plug ('JuliaEditorSupport/julia-vim', {['for'] = 'julia'})
 --------------------------------------------------------------------------------
 
--- Colorschemes
-Plug 'ajmwagar/vim-deus'
-Plug 'morhetz/gruvbox'
+-- Colorscheme
+Plug 'joshdick/onedark.vim'
 --------------------------------------------------------------------------------
 
 vim.call('plug#end')
---------------------------------------------------------------------------------
+--******************************************************************************
 
---------------------------------------------------------------------------------
+--******************************************************************************
 -- General configs
+--******************************************************************************
 vim.cmd 'syntax on' -- syntax highlighting, see :help syntax
 vim.cmd 'filetype plugin indent on' -- file type detection, see :help filetype
 vim.opt.number = true -- display line number
@@ -136,7 +141,7 @@ vim.opt.undofile = true -- see :help undodir and :help undofile
 vim.opt.incsearch = true -- see results while search is being typed, see :help incsearch
 vim.opt.smartindent = true -- auto indent on new lines, see :help smartindent
 vim.opt.ic = true -- ignore case when searching
-vim.opt.colorcolumn = '80' -- display color when line reaches pep8 standards
+vim.opt.colorcolumn = '81' -- display color when line reaches pep8 standards
 vim.opt.expandtab = true  -- expanding tab to spaces
 vim.opt.tabstop = 4 -- setting tab to 4 columns
 vim.opt.shiftwidth = 4 -- setting tab to 4 columns
@@ -146,13 +151,13 @@ vim.opt.hlsearch = true -- highlight all pervious search pattern with incsearch
 vim.opt.foldmethod = 'indent' -- use indentation to create folds
 vim.opt.wrap = false -- no wrap lines
 
--- New Leader Key
-vim.g.mapleader = ','
-
 -- Colorscheme
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
-vim.cmd 'colorscheme gruvbox'
+vim.cmd 'colorscheme onedark'
+
+-- New Leader Key
+vim.g.mapleader = ','
 
 -- Map key to show a List of Buffers
 vim.keymap.set('n', '<Leader>b', ':buffers<CR>')
@@ -166,52 +171,86 @@ vim.keymap.set('n', '<C-l>', function ()
 	vim.cmd('nohl')
 	print('Search cleared')
 end, {noremap = true})
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
--- Plugins Config
-
--- Vim-markdown-preview
-vim.g.vim_markdown_preview_use_xdg_open = true
-vim.g.vim_markdown_preview_github = true
-
--- Dart-vim-plugin config
-vim.g.dart_format_on_save = true
-vim.g.dart_style_guide = true
-vim.g.dart_trailing_comma_indent = true
-vim.g.dart_html_in_string = true
-
--- Go Fmt keep folding
-vim.g.go_fmt_experimental = true
-
--- CurtineIncSw config (switch between header and cpp file)
---map <Leader>s :call CurtineIncSw()<CR>
-vim.keymap.set('', '<Leader>s', function ()
-    vim.call('CurtineIncSw')
-    print('Swap header/cpp')
-end)
-
--- enable matchit plugin for julia blocks
-vim.cmd('runtime macros/matchit.vim')
-
--- enable spell on text files
-vim.api.nvim_create_autocmd('Filetype', {
-    pattern = 'markdown,text',
-    command = 'setlocal spell',
-})
-
--- COQ (auto-completion)
-vim.g.coq_settings = {
-    auto_start = true,
-}
 
 -- neovim init autogroup
 local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
+--******************************************************************************
+
+--******************************************************************************
+-- Autocompletions config
+--******************************************************************************
+
+-- Set up nvim-cmp.
+local cmp = require('cmp')
+
+cmp.setup({
+    snippet = {
+        -- REQUIRED - you must specify a snippet engine
+        expand = function(args)
+            vim.fn["vsnip#anonymous"](args.body)
+        end,
+    },
+    window = {
+        --completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        -- Accept currently selected item. Set `select` to `false` to only confirm
+        -- explicitly selected items.
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+    }),
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        { name = 'vsnip' }, -- For vsnip users.
+    }, {
+        { name = 'buffer' },
+    })
+})
+
+-- Use buffer source for `/` and `?`
+cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+        { name = 'buffer' }
+    }
+})
+
+-- Use cmdline & path source for ':'
+cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+        { name = 'path' }
+    }, {
+        { name = 'cmdline' }
+    })
+})
+
+--******************************************************************************
+-- LSP config
+--******************************************************************************
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- LSP configuration
 local lsp = require('lspconfig')
--- using coq to support LSP snippets
-local coq = require('coq')
 
 local on_attach = function(client, bufnr)
   -- format on save
@@ -225,8 +264,9 @@ local on_attach = function(client, bufnr)
 end
 
 -- pylsp - python
-lsp.pylsp.setup(coq.lsp_ensure_capabilities{
+lsp.pylsp.setup {
     on_attach = on_attach,
+    capabilities = capabilities,
     settings = {
         pylsp = {
             plugins = {
@@ -238,44 +278,52 @@ lsp.pylsp.setup(coq.lsp_ensure_capabilities{
                 },
             }
         }
-    }
-})
+    },
+}
+
 -- pyright - python
-lsp.pyright.setup(coq.lsp_ensure_capabilities{
-    on_attach = on_attach
-})
+lsp.pyright.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
 
 -- ccls - c/cpp
-lsp.ccls.setup(coq.lsp_ensure_capabilities{
-    on_attach = on_attach
-})
+lsp.ccls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
 
 -- golsp - golang
-lsp.gopls.setup(coq.lsp_ensure_capabilities{
-    on_attach = on_attach
-})
+lsp.gopls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
 
 -- tsserver - typescript
-lsp.tsserver.setup(coq.lsp_ensure_capabilities{
-    on_attach = on_attach
-})
+lsp.tsserver.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
 
 -- angularls - angularjs
-lsp.angularls.setup(coq.lsp_ensure_capabilities{
-    on_attach = on_attach
-})
+lsp.angularls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
 
 -- ltex-ls - languagetool lsp
-lsp.ltex.setup(coq.lsp_ensure_capabilities{
+-- yay -S ltex-ls-bin
+lsp.ltex.setup {
+    capabilities = capabilities,
     on_attach = on_attach,
     settings = {
         ltex = {
             language = 'auto',
         },
     },
-})
+}
 
--- hotkeys
+-- LSP hotkeys
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
@@ -314,6 +362,39 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+--******************************************************************************
+-- Plugins Config
+--******************************************************************************
+
+-- Vim-markdown-preview
+vim.g.vim_markdown_preview_use_xdg_open = true
+vim.g.vim_markdown_preview_github = true
+
+-- Dart-vim-plugin config
+vim.g.dart_format_on_save = true
+vim.g.dart_style_guide = true
+vim.g.dart_trailing_comma_indent = true
+vim.g.dart_html_in_string = true
+
+-- Go Fmt keep folding
+vim.g.go_fmt_experimental = true
+
+-- CurtineIncSw config (switch between header and cpp file)
+--map <Leader>s :call CurtineIncSw()<CR>
+vim.keymap.set('', '<Leader>s', function ()
+    vim.call('CurtineIncSw')
+    print('Swap header/cpp')
+end)
+
+-- enable matchit plugin for julia blocks
+vim.cmd('runtime macros/matchit.vim')
+
+-- enable spell on text files
+vim.api.nvim_create_autocmd('Filetype', {
+    pattern = 'markdown,text',
+    command = 'setlocal spell',
+})
+
 -- vim-pydocstring
 vim.g.pydocstring_formatter = 'google'
 vim.g.pydocstring_ignore_init = true
@@ -325,3 +406,20 @@ vim.api.nvim_create_autocmd('BufWritePost', {
     group = augroup_config,
     command = 'undojoin | silent !isort %',
 })
+
+-- vsnip mapping
+-- <C-j> to expand and jump to next entry
+vim.keymap.set({'i', 's'}, '<C-j>', function()
+    return vim.call('vsnip#available', 1) == 1 and '<Plug>(vsnip-expand-or-jump)' or '<C-j>'
+end, {expr = true})
+
+-- <Tab> to jump forward
+vim.keymap.set({'i', 's'}, '<Tab>', function()
+    return vim.call('vsnip#jumpable', 1) == 1 and '<Plug>(vsnip-jump-next)' or '<Tab>'
+end, {expr = true})
+
+-- <S-Tab> to jump backward
+vim.keymap.set({'i', 's'}, '<S-Tab>', function()
+    return vim.call('vsnip#jumpable', -1) == 1 and '<Plug>(vsnip-jump-prev)' or '<S-Tab>'
+end, {expr = true})
+--******************************************************************************
