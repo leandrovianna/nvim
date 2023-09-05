@@ -269,7 +269,41 @@ local on_attach = function(client, bufnr)
   end
 end
 
+-- angularls - angularjs
+-- npm install -g @angular/language-server
+lsp.angularls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
+
+-- ccls - c/cpp
+-- yay -S ccls
+lsp.ccls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
+
+-- gopls - golang
+-- go install golang.org/x/tools/gopls@latest
+lsp.gopls.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+}
+
+-- ltex-ls - languagetool lsp
+-- yay -S ltex-ls-bin
+lsp.ltex.setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = {
+        ltex = {
+            language = 'auto',
+        },
+    },
+}
+
 -- pylsp - python
+-- pipx install 'python-lsp-server[all]'
 lsp.pylsp.setup {
     on_attach = on_attach,
     capabilities = capabilities,
@@ -288,45 +322,17 @@ lsp.pylsp.setup {
 }
 
 -- pyright - python
+-- pipx install pyright
 lsp.pyright.setup {
     capabilities = capabilities,
     on_attach = on_attach,
 }
 
--- ccls - c/cpp
-lsp.ccls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-
--- golsp - golang
-lsp.gopls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-
 -- tsserver - typescript
+-- sudo npm install -g typescript typescript-language-server
 lsp.tsserver.setup {
     capabilities = capabilities,
     on_attach = on_attach,
-}
-
--- angularls - angularjs
-lsp.angularls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-
--- ltex-ls - languagetool lsp
--- yay -S ltex-ls-bin
-lsp.ltex.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-    settings = {
-        ltex = {
-            language = 'auto',
-        },
-    },
 }
 
 -- LSP hotkeys
@@ -414,8 +420,8 @@ vim.g.loaded_netrwPlugin = 1
 -- empty setup using defaults
 require("nvim-tree").setup()
 
--- set mapping <C-n> to show/focus
-vim.keymap.set('n', '<C-n>', ':NvimTreeFocus<CR>')
+-- set mapping <C-n> to show/close
+vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
 
 -- lualine config
 require('lualine').setup {

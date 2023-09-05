@@ -2,43 +2,64 @@
 
 # After clone the repository, run this script to configure
 # environment, install depedencies and install Plug on neovim
+# Configuration for Arch Linux with yay installed
 
-function require()
+install_depedencies()
 {
-    cmd=$1
-    if ! command -v $cmd &> /dev/null
-    then
-        echo "$cmd is required to be installed"
-        exit
-    fi
+    # ttf-agave-nerd: nerd font agave
+    # python-pix: run pip installed programs isolated
+
+    sudo pacman -S yay
+    yay -S neovim nodejs npm java-openjdk python-pipx go ttf-agave-nerd
 }
 
-require nvim
-require pip
-require npm
-require java
-require yay
+install_language_servers()
+{
+    # install angularls
+    sudo npm install -g @angular/language-server
 
-# install grip to preview markdown files
-pip install grip
+    # install c and cpp language server
+    yay -S ccls
 
-# install pynvim
-pip install pynvim
+    # install gopls
+    go install golang.org/x/tools/gopls@latest
 
-# install pylsp
-pip install 'python-lsp-server[all]'
+    # install languagetool language server ltex-ls
+    yay -S ltex-ls-bin
 
-# install typescript language server
-sudo npm i -g typescript-language-server
+    # install pylsp
+    pipx install 'python-lsp-server[all]'
 
-# install nerd font agave
-yay -S ttf-agave-nerd
+    # install pyright
+    pipx install pyright
 
-# neo-vim should already be installed!
+    # install typescript language server
+    sudo npm install -g typescript-language-server
 
-# install plug - plugin manager
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+}
 
-# install all plugins
-nvim +PlugInstall +qall
+install_plugin_manager()
+{
+    # install plug - plugin manager
+    curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+    # install all plugins
+    nvim +PlugInstall +qall
+}
+
+configuration ()
+{
+    echo 'Neovim setup script'
+
+    echo 'Install depedencies'
+    install_depedencies
+
+    echo 'Install LSPs'
+    install_language_servers
+
+    echo 'Install Plug and plugins'
+    install_plugin_manager
+}
+
+configuration
