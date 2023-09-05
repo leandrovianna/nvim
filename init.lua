@@ -43,10 +43,9 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 
--- vsnip - snippet plugin
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
-Plug 'hrsh7th/cmp-vsnip'
+-- LuaSnip - snippet plugin
+Plug ('L3MON4D3/LuaSnip', {tag = 'v2.*', ['do'] = 'make install_jsregexp'})
+Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'rafamadriz/friendly-snippets'
 --------------------------------------------------------------------------------
 
@@ -184,12 +183,13 @@ local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
 
 -- Set up nvim-cmp.
 local cmp = require('cmp')
+local luasnip = require("luasnip")
 
 cmp.setup({
     snippet = {
         -- REQUIRED - you must specify a snippet engine
         expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
+            luasnip.lsp_expand(args.body)
         end,
     },
     window = {
@@ -203,10 +203,12 @@ cmp.setup({
         ['<C-e>'] = cmp.mapping.abort(),
         -- Accept currently selected item. Set `select` to `false` to only confirm
         -- explicitly selected items.
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<CR>'] = cmp.mapping.confirm({ select = false }),
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_next_item()
+            elseif luasnip.expand_or_locally_jumpable() then
+                luasnip.expand_or_jump()
             else
                 fallback()
             end
@@ -214,6 +216,8 @@ cmp.setup({
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
             else
                 fallback()
             end
@@ -221,7 +225,7 @@ cmp.setup({
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'vsnip' }, -- For vsnip users.
+        { name = 'luasnip' }, -- For vsnip users.
     }, {
         { name = 'buffer' },
     })
@@ -402,22 +406,6 @@ vim.api.nvim_create_autocmd('BufWritePost', {
     command = 'undojoin | silent !isort %',
 })
 
--- vsnip mapping
--- <C-j> to expand and jump to next entry
-vim.keymap.set({'i', 's'}, '<C-j>', function()
-    return vim.call('vsnip#available', 1) == 1 and '<Plug>(vsnip-expand-or-jump)' or '<C-j>'
-end, {expr = true})
-
--- <Tab> to jump forward
-vim.keymap.set({'i', 's'}, '<Tab>', function()
-    return vim.call('vsnip#jumpable', 1) == 1 and '<Plug>(vsnip-jump-next)' or '<Tab>'
-end, {expr = true})
-
--- <S-Tab> to jump backward
-vim.keymap.set({'i', 's'}, '<S-Tab>', function()
-    return vim.call('vsnip#jumpable', -1) == 1 and '<Plug>(vsnip-jump-prev)' or '<S-Tab>'
-end, {expr = true})
-
 -- nvim-tree config
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
@@ -428,7 +416,6 @@ require("nvim-tree").setup()
 
 -- set mapping <C-n> to show/focus
 vim.keymap.set('n', '<C-n>', ':NvimTreeFocus<CR>')
-vim.keymap.set('n', '<C-m>', ':NvimTreeFindFile<CR>')
 
 -- lualine config
 require('lualine').setup {
@@ -471,4 +458,22 @@ require('lualine').setup {
   inactive_winbar = {},
   extensions = {}
 }
+
+-- luasnip config
+-- load snippets from custom paths
+local custom_paths = {
+    vim.fn.fnamemodify(vim.env.myvimrc, ':p:h') .. '/snippets',
+}
+require("luasnip.loaders.from_vscode").lazy_load()
+require('luasnip.loaders.from_snipmate').lazy_load()
+
+-- mapping
+vim.keymap.set({"i"}, "<C-K>", function() luasnip.expand() end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-L>", function() luasnip.jump(1) end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-J>", function() luasnip.jump(-1) end, {silent = true})
+vim.keymap.set({"i", "s"}, "<C-E>", function()
+	if luasnip.choice_active() then
+		luasnip.change_choice(1)
+	end
+end, {silent = true})
 --******************************************************************************
