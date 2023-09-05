@@ -17,6 +17,7 @@ require nvim
 require pip
 require npm
 require java
+require yay
 
 # install grip to preview markdown files
 pip install grip
@@ -30,9 +31,14 @@ pip install 'python-lsp-server[all]'
 # install typescript language server
 sudo npm i -g typescript-language-server
 
+# install nerd font agave
+yay -S ttf-agave-nerd
+
 # neo-vim should already be installed!
 
 # install plug - plugin manager
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# install all plugins
 nvim +PlugInstall +qall

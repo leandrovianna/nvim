@@ -5,12 +5,17 @@ local Plug = vim.fn['plug#']
 vim.call('plug#begin')
 
 -- General Plugins
-Plug ('scrooloose/nerdtree', { on =  'NERDTreeToggle'})
 
-Plug 'itchyny/lightline.vim'
+-- nvim-tree - Tree Explorer
+Plug 'nvim-tree/nvim-tree.lua'
+-- depedencies:
+Plug 'nvim-tree/nvim-web-devicons'
 
--- Unix command for vim
-Plug 'tpope/vim-eunuch'
+-- status line
+Plug 'nvim-lualine/lualine.nvim'
+
+-- git plugin
+Plug 'tpope/vim-fugitive'
 
 -- comment plugin - <Leader>cc <Leader>cu
 Plug 'scrooloose/nerdcommenter'
@@ -39,9 +44,9 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 
 -- vsnip - snippet plugin
-Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'hrsh7th/cmp-vsnip'
 Plug 'rafamadriz/friendly-snippets'
 --------------------------------------------------------------------------------
 
@@ -66,16 +71,13 @@ Plug ('reisub0/hot-reload.vim', {['for'] = 'dart'})
 Plug ('plasticboy/vim-markdown', {['for']  = 'markdown'})
 
 Plug ('godlygeek/tabular', {['for'] = 'markdown'})
-
--- press Ctrl-p
-Plug ('JamshedVesuna/vim-markdown-preview', {['for'] = 'markdown'})
 --------------------------------------------------------------------------------
 
 -- Typescript
-Plug 'leafgarland/typescript-vim'
+Plug ('leafgarland/typescript-vim', {['for'] = 'typescript'})
 
 -- JSX
-Plug 'MaxMEllon/vim-jsx-pretty'
+Plug ('MaxMEllon/vim-jsx-pretty', {['for'] = 'javascript, typescript'})
 --------------------------------------------------------------------------------
 
 -- Html, Jinja and templates
@@ -366,18 +368,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- Plugins Config
 --******************************************************************************
 
--- Vim-markdown-preview
-vim.g.vim_markdown_preview_use_xdg_open = true
-vim.g.vim_markdown_preview_github = true
-
 -- Dart-vim-plugin config
 vim.g.dart_format_on_save = true
 vim.g.dart_style_guide = true
 vim.g.dart_trailing_comma_indent = true
 vim.g.dart_html_in_string = true
-
--- Go Fmt keep folding
-vim.g.go_fmt_experimental = true
 
 -- CurtineIncSw config (switch between header and cpp file)
 --map <Leader>s :call CurtineIncSw()<CR>
@@ -422,4 +417,58 @@ end, {expr = true})
 vim.keymap.set({'i', 's'}, '<S-Tab>', function()
     return vim.call('vsnip#jumpable', -1) == 1 and '<Plug>(vsnip-jump-prev)' or '<S-Tab>'
 end, {expr = true})
+
+-- nvim-tree config
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- empty setup using defaults
+require("nvim-tree").setup()
+
+-- set mapping <C-n> to show/focus
+vim.keymap.set('n', '<C-n>', ':NvimTreeFocus<CR>')
+vim.keymap.set('n', '<C-m>', ':NvimTreeFindFile<CR>')
+
+-- lualine config
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
 --******************************************************************************
