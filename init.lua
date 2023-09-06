@@ -166,17 +166,17 @@ vim.cmd 'colorscheme onedark'
 vim.g.mapleader = ','
 
 -- Map key to show a List of Buffers
-vim.keymap.set('n', '<Leader>b', ':buffers<CR>')
+vim.keymap.set('n', '<Leader>b', ':buffers<CR>', { desc = 'List all buffers'})
 
 -- Copy and Paste facilities
-vim.keymap.set('v', '<Leader>y', '"+y')
-vim.keymap.set('n', '<Leader>p', '"+p')
+vim.keymap.set('v', '<Leader>y', '"+y', { desc = 'Copy to system clipboard' })
+vim.keymap.set('n', '<Leader>p', '"+p', { desc = 'Paste from system clipboard' })
 
 -- Keybind Ctrl+l to clear search
 vim.keymap.set('n', '<C-l>', function ()
 	vim.cmd('nohl')
 	print('Search cleared')
-end, {noremap = true})
+end, {noremap = true, desc = 'Clear search highlight'})
 
 -- neovim init autogroup
 local augroup_config = vim.api.nvim_create_augroup('config', {clear = true})
@@ -343,10 +343,17 @@ lsp.tsserver.setup {
 -- LSP hotkeys
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+function get_diagnostic_opts(desc)
+    return { desc = 'Diagnostic: ' .. desc }
+end
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float,
+    get_diagnostic_opts('Open floating list'))
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev,
+    get_diagnostic_opts('Go to previous'))
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next,
+    get_diagnostic_opts('Go to next'))
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist,
+    get_diagnostic_opts('Add to loclist'))
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -358,24 +365,27 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    function get_opts(desc)
+        local opts = { buffer = ev.buf, desc = 'LSP: ' .. desc}
+    end
+
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, get_opts('go to declaration'))
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, get_opts('go to definition'))
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, get_opts('info about the symbol'))
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, get_opts('go to implementation'))
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, get_opts('display signature info'))
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, get_opts(''))
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, get_opts(''))
     vim.keymap.set('n', '<space>wl', function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    end, get_opts(''))
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, get_opts('go to type definition'))
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, get_opts('rename references to the symbol'))
+    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, get_opts('select a code action'))
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, get_opts('list all references'))
     vim.keymap.set('n', '<space>f', function()
       vim.lsp.buf.format { async = true }
-    end, opts)
+    end, get_opts('autoformat'))
   end,
 })
 
@@ -472,9 +482,6 @@ require('lualine').setup {
 
 -- luasnip config
 -- load snippets from custom paths
-local custom_paths = {
-    vim.fn.fnamemodify(vim.env.myvimrc, ':p:h') .. '/snippets',
-}
 require("luasnip.loaders.from_vscode").lazy_load()
 require('luasnip.loaders.from_snipmate').lazy_load()
 
