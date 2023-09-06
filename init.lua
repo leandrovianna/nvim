@@ -17,6 +17,11 @@ Plug 'nvim-lualine/lualine.nvim'
 -- git plugin
 Plug 'tpope/vim-fugitive'
 
+-- fuzzy search
+Plug ('nvim-telescope/telescope.nvim', { branch = '0.1.x' })
+-- depedencies:
+Plug 'nvim-lua/plenary.nvim'
+
 -- comment plugin - <Leader>cc <Leader>cu
 Plug 'scrooloose/nerdcommenter'
 
@@ -482,4 +487,11 @@ vim.keymap.set({"i", "s"}, "<C-E>", function()
 		luasnip.change_choice(1)
 	end
 end, {silent = true})
+
+-- fuzzy search telescope config
+local telescope_builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', telescope_builtin.help_tags, {})
 --******************************************************************************
