@@ -10,7 +10,7 @@ install_depedencies()
     # python-pix: run pip installed programs isolated
 
     sudo pacman -S yay
-    yay -S neovim nodejs npm java-openjdk python-pipx go ttf-agave-nerd
+    yay -S neovim nodejs npm java-openjdk python-pipx go ttf-agave-nerd ripgrep
 }
 
 install_language_servers()
