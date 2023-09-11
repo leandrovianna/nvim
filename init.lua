@@ -149,9 +149,10 @@ vim.opt.smartindent = true -- auto indent on new lines, see :help smartindent
 vim.opt.ic = true -- ignore case when searching
 vim.opt.colorcolumn = '81' -- display color when line reaches pep8 standards
 vim.opt.expandtab = true  -- expanding tab to spaces
-vim.opt.tabstop = 4 -- setting tab to 4 columns
-vim.opt.shiftwidth = 4 -- setting tab to 4 columns
-vim.opt.softtabstop = 4 -- setting tab to 4 columns
+local tab_size = 2
+vim.opt.tabstop = tab_size
+vim.opt.shiftwidth = tab_size
+vim.opt.softtabstop = tab_size
 vim.opt.showmatch = true -- display matching bracket or parenthesis
 vim.opt.hlsearch = true -- highlight all pervious search pattern with incsearch
 vim.opt.foldmethod = 'indent' -- use indentation to create folds
@@ -433,10 +434,30 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 -- empty setup using defaults
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+    view = {
+        width = 40,
+    },
+    renderer = {
+        full_name = true,
+    },
+    diagnostics = {
+        enable = true,
+    },
+    tab = {
+        sync = {
+            open = true,
+            close = true,
+        },
+    },
+})
 
 -- set mapping <C-n> to show/close
-vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
+vim.keymap.set('n', '<C-n>', ':NvimTreeFindFileToggle<CR>',
+  { desc = 'Open Tree Explorer' })
+-- set mapping <C-m> to focus
+vim.keymap.set('n', '<C-m>', ':NvimTreeFocus<CR>',
+  { desc = 'Focus on Tree Explorer' })
 
 -- lualine config
 require('lualine').setup {
@@ -486,22 +507,37 @@ require("luasnip.loaders.from_vscode").lazy_load()
 require('luasnip.loaders.from_snipmate').lazy_load()
 
 -- mapping
-vim.keymap.set({"i"}, "<C-K>", function() luasnip.expand() end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-L>", function() luasnip.jump(1) end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-J>", function() luasnip.jump(-1) end, {silent = true})
-vim.keymap.set({"i", "s"}, "<C-E>", function()
+vim.keymap.set({"i"}, "<C-k>", function() luasnip.expand() end,
+  {silent = true, desc = 'Expand snippet'})
+vim.keymap.set({"i", "s"}, "<C-l>", function() luasnip.jump(1) end,
+  {silent = true, desc = 'Jump to next snippet entry'})
+vim.keymap.set({"i", "s"}, "<C-j>", function() luasnip.jump(-1) end,
+  {silent = true, desc = 'Jump to previous snippet entry'})
+vim.keymap.set({"i", "s"}, "<C-e>", function()
 	if luasnip.choice_active() then
 		luasnip.change_choice(1)
 	end
-end, {silent = true})
+end, {silent = true, desc = 'Close snippet choices'})
 
 -- fuzzy search telescope config
 local telescope_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', telescope_builtin.help_tags, {})
-vim.keymap.set('n', '<leader>fp', telescope_builtin.builtin, {})
-vim.keymap.set('n', '<leader>fk', telescope_builtin.keymaps, {})
-vim.keymap.set('n', '<leader>fm', telescope_builtin.man_pages, {})
+function ff_opts(desc)
+  return { desc = 'Fuzzy search: ' .. desc }
+end
+vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files,
+  ff_opts('Find files'))
+vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep,
+  ff_opts('Live grep'))
+vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers,
+  ff_opts('List buffers'))
+vim.keymap.set('n', '<leader>fh', telescope_builtin.help_tags,
+  ff_opts('Help tags'))
+vim.keymap.set('n', '<leader>fp', telescope_builtin.builtin,
+  ff_opts('List builtin pickers'))
+vim.keymap.set('n', '<leader>fk', telescope_builtin.keymaps,
+  ff_opts('List keymaps'))
+vim.keymap.set('n', '<leader>fm', telescope_builtin.man_pages,
+  ff_opts('Search man pages'))
+vim.keymap.set('n', '<leader>fs', telescope_builtin.grep_string,
+  ff_opts('Grep string'))
 --******************************************************************************
