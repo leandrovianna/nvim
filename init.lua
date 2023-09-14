@@ -367,7 +367,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     function get_opts(desc)
-        local opts = { buffer = ev.buf, desc = 'LSP: ' .. desc}
+        return { buffer = ev.buf, desc = 'LSP: ' .. desc}
     end
 
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, get_opts('go to declaration'))
