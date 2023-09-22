@@ -540,4 +540,11 @@ vim.keymap.set('n', '<leader>fm', telescope_builtin.man_pages,
   ff_opts('Search man pages'))
 vim.keymap.set('n', '<leader>fs', telescope_builtin.grep_string,
   ff_opts('Grep string'))
+
+-- disable fold on telescope window
+-- source: https://github.com/nvim-telescope/telescope-file-browser.nvim/issues/249#issuecomment-1474434318
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'TelescopeResults',
+  command = 'setlocal nofoldenable',
+})
 --******************************************************************************
