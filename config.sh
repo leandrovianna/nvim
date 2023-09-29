@@ -36,6 +36,11 @@ install_language_servers()
     # install typescript language server
     sudo npm install -g typescript-language-server
 
+    # install sql language server
+    sudo npm install -g sql-language-server
+
+    # install lsp for HTML, CSS, JSON and ESLint
+    sudo npm install -g vscode-langservers-extracted
 }
 
 install_plugin_manager()

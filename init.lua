@@ -54,6 +54,13 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'rafamadriz/friendly-snippets'
 --------------------------------------------------------------------------------
 
+-- vim-prettier - format using prettier support
+Plug ('prettier/vim-prettier', {
+  ['do'] = 'npm install --frozen-lockfile --production',
+  ['for'] = {'javascript', 'typescript', 'css', 'less', 'scss',
+    'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'},
+})
+
 -- Python
 Plug ('heavenshell/vim-pydocstring',
     {['for'] = 'python', ['do'] = 'make install'})
@@ -155,7 +162,9 @@ vim.opt.shiftwidth = tab_size
 vim.opt.softtabstop = tab_size
 vim.opt.showmatch = true -- display matching bracket or parenthesis
 vim.opt.hlsearch = true -- highlight all pervious search pattern with incsearch
-vim.opt.foldmethod = 'indent' -- use indentation to create folds
+vim.opt.foldmethod = 'indent' -- create folds
+vim.opt.foldcolumn = 'auto:3'
+vim.opt.foldlevelstart = 2
 vim.opt.wrap = false -- no wrap lines
 
 -- Colorscheme
@@ -166,17 +175,14 @@ vim.cmd 'colorscheme onedark'
 -- New Leader Key
 vim.g.mapleader = ','
 
--- Map key to show a List of Buffers
-vim.keymap.set('n', '<Leader>b', ':buffers<CR>', { desc = 'List all buffers'})
-
 -- Copy and Paste facilities
 vim.keymap.set('v', '<Leader>y', '"+y', { desc = 'Copy to system clipboard' })
 vim.keymap.set('n', '<Leader>p', '"+p', { desc = 'Paste from system clipboard' })
 
 -- Keybind Ctrl+l to clear search
 vim.keymap.set('n', '<C-l>', function ()
-	vim.cmd('nohl')
-	print('Search cleared')
+	vim.cmd [[ nohl ]]
+	print [[ Search cleared ]]
 end, {noremap = true, desc = 'Clear search highlight'})
 
 -- neovim init autogroup
@@ -267,7 +273,7 @@ local lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
   -- format on save
   if client.server_capabilities.documentFormattingProvider then
-    vim.api.nvim_create_autocmd("BufWritePre", {
+    vim.api.nvim_create_autocmd('BufWritePre', {
       group = augroup_config,
       buffer = bufnr,
       callback = function() vim.lsp.buf.format() end
@@ -275,71 +281,15 @@ local on_attach = function(client, bufnr)
   end
 end
 
--- angularls - angularjs
--- npm install -g @angular/language-server
-lsp.angularls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
+local servers = {'angularls', 'ccls', 'cssls', 'eslint', 'gopls', 'html',
+  'jsonls', 'ltex', 'pylsp', 'pyright', 'tsserver', 'sqlls'}
 
--- ccls - c/cpp
--- yay -S ccls
-lsp.ccls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-
--- gopls - golang
--- go install golang.org/x/tools/gopls@latest
-lsp.gopls.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-
--- ltex-ls - languagetool lsp
--- yay -S ltex-ls-bin
-lsp.ltex.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-    settings = {
-        ltex = {
-            language = 'auto',
-        },
-    },
-}
-
--- pylsp - python
--- pipx install 'python-lsp-server[all]'
-lsp.pylsp.setup {
+for _, server in pairs(servers) do
+  lsp[server].setup {
     on_attach = on_attach,
     capabilities = capabilities,
-    settings = {
-        pylsp = {
-            plugins = {
-                pylint = {
-                    enabled = false,
-                },
-                pydocstyle = {
-                    enabled = true,
-                },
-            }
-        }
-    },
-}
-
--- pyright - python
--- pipx install pyright
-lsp.pyright.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
-
--- tsserver - typescript
--- sudo npm install -g typescript typescript-language-server
-lsp.tsserver.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-}
+  }
+end
 
 -- LSP hotkeys
 -- Global mappings.
@@ -359,7 +309,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist,
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  group = augroup_config,
   callback = function(ev)
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
@@ -412,7 +362,7 @@ vim.cmd('runtime macros/matchit.vim')
 
 -- enable spell on text files
 vim.api.nvim_create_autocmd('Filetype', {
-    pattern = 'markdown,text',
+    pattern = 'markdown, text',
     command = 'setlocal spell',
 })
 
@@ -433,7 +383,6 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- empty setup using defaults
 require("nvim-tree").setup({
     view = {
         width = 40,
@@ -455,9 +404,6 @@ require("nvim-tree").setup({
 -- set mapping <C-n> to show/close
 vim.keymap.set('n', '<C-n>', ':NvimTreeFindFileToggle<CR>',
   { desc = 'Open Tree Explorer' })
--- set mapping <C-m> to focus
-vim.keymap.set('n', '<C-m>', ':NvimTreeFocus<CR>',
-  { desc = 'Focus on Tree Explorer' })
 
 -- lualine config
 require('lualine').setup {
@@ -546,5 +492,27 @@ vim.keymap.set('n', '<leader>fs', telescope_builtin.grep_string,
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'TelescopeResults',
   command = 'setlocal nofoldenable',
+})
+
+-- vim-prettier config
+vim.g['prettier#exec_cmd_async'] = true
+vim.g['prettier#autoformat'] = false
+
+function prettier_restore_position()
+  -- run prettier
+  vim.cmd [[ Prettier ]]
+  -- recalculate folds and restore cursor position
+  vim.fn.feedkeys [[ zx ]]
+end
+
+-- remap
+vim.keymap.set('n', '<Leader>af', prettier_restore_position,
+  { desc = 'Format with Prettier' })
+
+-- autoformat on save
+vim.api.nvim_create_autocmd('BufWritePre', {
+  group = augroup_config,
+  pattern = {'*.js', '*.ts', '*.jsx', '*.tsx' },
+  callback = prettier_restore_position,
 })
 --******************************************************************************
