@@ -57,13 +57,12 @@ Plug 'rafamadriz/friendly-snippets'
 -- vim-prettier - format using prettier support
 Plug ('prettier/vim-prettier', {
   ['do'] = 'npm install --frozen-lockfile --production',
-  ['for'] = {'javascript', 'typescript', 'css', 'less', 'scss',
-    'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'},
 })
+--------------------------------------------------------------------------------
 
 -- Python
 Plug ('heavenshell/vim-pydocstring',
-    {['for'] = 'python', ['do'] = 'make install'})
+  {['for'] = 'python', ['do'] = 'make install'})
 --------------------------------------------------------------------------------
 
 -- Golang
@@ -515,7 +514,7 @@ vim.keymap.set('n', '<Leader>af', prettier_restore_position,
 -- autoformat on save
 vim.api.nvim_create_autocmd('BufWritePre', {
   group = augroup_config,
-  pattern = {'*.js', '*.ts', '*.jsx', '*.tsx' },
+  pattern = {'*.js', '*.ts', '*.jsx', '*.tsx'},
   callback = prettier_restore_position,
 })
 --******************************************************************************
