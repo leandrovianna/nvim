@@ -401,9 +401,12 @@ require("nvim-tree").setup({
     },
 })
 
--- set mapping <C-n> to show/close
-vim.keymap.set('n', '<C-n>', ':NvimTreeFindFileToggle<CR>',
-  { desc = 'Open Tree Explorer' })
+-- set mapping <C-n> to open/close
+vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>',
+  { desc = 'Toggle Tree Explorer' })
+-- set mapping <C-m> to find file in the tree
+vim.keymap.set('n', '<C-m>', ':NvimTreeFindFile<CR>',
+  { desc = 'Find file and open Tree Explorer' })
 
 -- lualine config
 require('lualine').setup {
