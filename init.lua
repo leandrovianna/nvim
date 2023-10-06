@@ -446,7 +446,7 @@ require('lualine').setup {
   tabline = {},
   winbar = {},
   inactive_winbar = {},
-  extensions = {}
+  extensions = {'nvim-tree'}
 }
 
 -- luasnip config
@@ -497,7 +497,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- vim-prettier config
-vim.g['prettier#exec_cmd_async'] = true
+vim.g['prettier#exec_cmd_async'] = false
 vim.g['prettier#autoformat'] = false
 
 function prettier_restore_position()
@@ -514,7 +514,7 @@ vim.keymap.set('n', '<Leader>af', prettier_restore_position,
 -- autoformat on save
 vim.api.nvim_create_autocmd('BufWritePre', {
   group = augroup_config,
-  pattern = {'*.js', '*.ts', '*.jsx', '*.tsx'},
+  pattern = {'*.js', '*.ts', '*.jsx', '*.tsx', '*.css', '*.scss'},
   callback = prettier_restore_position,
 })
 --******************************************************************************
