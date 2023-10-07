@@ -14,6 +14,9 @@ Plug 'nvim-tree/nvim-web-devicons'
 -- status line
 Plug 'nvim-lualine/lualine.nvim'
 
+-- tabs plugin
+Plug 'romgrk/barbar.nvim'
+
 -- git plugin
 Plug 'tpope/vim-fugitive'
 
