@@ -520,4 +520,21 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = {'*.js', '*.ts', '*.jsx', '*.tsx', '*.css', '*.scss'},
   callback = prettier_restore_position,
 })
+
+-- barbar config
+function get_barbar_opts(desc)
+  return { desc = 'Tabs: ' .. desc, noremap = true, silent = true }
+end
+vim.keymap.set('n', 'gt', '<Cmd>BufferNext<CR>', get_barbar_opts('Next buffer'))
+vim.keymap.set('n', 'gT', '<Cmd>BufferPrevious<CR>',
+  get_barbar_opts('Previous buffer'))
+vim.keymap.set('n', 'gp', '<Cmd>BufferPin<CR>',
+  get_barbar_opts('Pin current buffer'))
+vim.keymap.set('n', 'gc', '<Cmd>BufferClose<CR>',
+  get_barbar_opts('Close buffer'))
+vim.keymap.set('n', '<C-p>', '<Cmd>BufferPick<CR>',
+  get_barbar_opts('Magic buffer picker'))
+vim.keymap.set('n', '<C-P>', '<Cmd>BufferPickDelete<CR>',
+  get_barbar_opts('Magic buffer picker (close)'))
+--******************************************************************************
 --******************************************************************************
