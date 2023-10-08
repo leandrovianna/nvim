@@ -9,13 +9,16 @@ install_depedencies()
     # ttf-agave-nerd: nerd font agave
     # python-pipx: run pip installed programs isolated
     # ripgrep: use with telescope-nvim
-    # rxvt-unicode: terminal emulator
+    # rxvt-unicode-truecolor-wide-glyphs: terminal emulator
+    #   - support of Truecolor
+    #   - already include perl plugins
     # ranger: terminal-based file explorer
     # w3m: support for preview images inside ranger
 
     sudo pacman -S yay
     yay -S neovim ttf-agave-nerd ripgrep \
-      rxvt-unicode  urxvt-perls \
+      #rxvt-unicode  urxvt-perls \
+      rxvt-unicode-truecolor-wide-glyphs \
       nodejs npm java-openjdk python-pipx go \
       ranger w3m
 }
