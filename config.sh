@@ -7,10 +7,14 @@
 install_depedencies()
 {
     # ttf-agave-nerd: nerd font agave
-    # python-pix: run pip installed programs isolated
+    # python-pipx: run pip installed programs isolated
+    # ripgrep: use with telescope-nvim
+    # rxvt-unicode: terminal emulator
 
     sudo pacman -S yay
-    yay -S neovim nodejs npm java-openjdk python-pipx go ttf-agave-nerd ripgrep
+    yay -S neovim ttf-agave-nerd ripgrep \
+      rxvt-unicode  urxvt-perls \
+      nodejs npm java-openjdk python-pipx go
 }
 
 install_language_servers()
