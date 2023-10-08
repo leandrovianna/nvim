@@ -136,7 +136,7 @@ Plug ('JuliaEditorSupport/julia-vim', {['for'] = 'julia'})
 --------------------------------------------------------------------------------
 
 -- Colorscheme
-Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
 --------------------------------------------------------------------------------
 
 vim.call('plug#end')
@@ -145,8 +145,8 @@ vim.call('plug#end')
 --******************************************************************************
 -- General configs
 --******************************************************************************
-vim.cmd 'syntax on' -- syntax highlighting, see :help syntax
-vim.cmd 'filetype plugin indent on' -- file type detection, see :help filetype
+vim.cmd [[ syntax on ]] -- syntax highlighting, see :help syntax
+vim.cmd [[ filetype plugin indent on ]] -- file type detection, see :help filetype
 vim.opt.number = true -- display line number
 vim.opt.path:append('**') -- improves searching, see :help path
 vim.opt.swapfile = false -- disable use of swap files
@@ -172,7 +172,7 @@ vim.opt.wrap = false -- no wrap lines
 -- Colorscheme
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
-vim.cmd 'colorscheme onedark'
+vim.cmd.colorscheme [[gruvbox]]
 
 -- New Leader Key
 vim.g.mapleader = ','
