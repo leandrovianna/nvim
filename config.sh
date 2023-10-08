@@ -10,11 +10,14 @@ install_depedencies()
     # python-pipx: run pip installed programs isolated
     # ripgrep: use with telescope-nvim
     # rxvt-unicode: terminal emulator
+    # ranger: terminal-based file explorer
+    # w3m: support for preview images inside ranger
 
     sudo pacman -S yay
     yay -S neovim ttf-agave-nerd ripgrep \
       rxvt-unicode  urxvt-perls \
-      nodejs npm java-openjdk python-pipx go
+      nodejs npm java-openjdk python-pipx go \
+      ranger w3m
 }
 
 install_language_servers()
