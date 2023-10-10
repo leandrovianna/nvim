@@ -137,6 +137,7 @@ Plug ('JuliaEditorSupport/julia-vim', {['for'] = 'julia'})
 
 -- Colorscheme
 Plug 'morhetz/gruvbox'
+Plug ('nordtheme/vim', {as = 'nord'})
 --------------------------------------------------------------------------------
 
 vim.call('plug#end')
@@ -534,7 +535,6 @@ vim.keymap.set('n', 'gc', '<Cmd>BufferClose<CR>',
   get_barbar_opts('Close buffer'))
 vim.keymap.set('n', '<C-p>', '<Cmd>BufferPick<CR>',
   get_barbar_opts('Magic buffer picker'))
-vim.keymap.set('n', '<C-P>', '<Cmd>BufferPickDelete<CR>',
+vim.keymap.set('n', '<C-S-p>', '<Cmd>BufferPickDelete<CR>',
   get_barbar_opts('Magic buffer picker (close)'))
---******************************************************************************
 --******************************************************************************

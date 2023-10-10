@@ -12,6 +12,7 @@ install_depedencies()
     # rxvt-unicode-truecolor-wide-glyphs: terminal emulator
     #   - support of Truecolor
     #   - already include perl plugins
+    #   - urxvt-tabbedex: tabs plugin
     # ranger: terminal-based file explorer
     # w3m: support for preview images inside ranger
 
@@ -19,6 +20,7 @@ install_depedencies()
     yay -S neovim ttf-agave-nerd ripgrep \
       #rxvt-unicode  urxvt-perls \
       rxvt-unicode-truecolor-wide-glyphs \
+      urxvt-tabbedex \
       nodejs npm java-openjdk python-pipx go \
       ranger w3m
 }
